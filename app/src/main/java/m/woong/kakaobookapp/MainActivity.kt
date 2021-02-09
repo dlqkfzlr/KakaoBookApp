@@ -2,7 +2,7 @@ package m.woong.kakaobookapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import m.woong.kakaobookapp.ui.main.MainFragment
+import m.woong.kakaobookapp.ui.books.BooksFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance())
+                .replace(R.id.container, BooksFragment.newInstance())
                 .commitNow()
         }
     }

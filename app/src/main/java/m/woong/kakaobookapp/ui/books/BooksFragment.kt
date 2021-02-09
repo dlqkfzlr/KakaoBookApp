@@ -1,4 +1,4 @@
-package m.woong.kakaobookapp.ui.main
+package m.woong.kakaobookapp.ui.books
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
@@ -7,11 +7,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import m.woong.kakaobookapp.R
+import m.woong.kakaobookapp.ui.MainViewModel
 
-class MainFragment : Fragment() {
+class BooksFragment : Fragment() {
 
     companion object {
-        fun newInstance() = MainFragment()
+        fun newInstance() = BooksFragment()
     }
 
     private lateinit var viewModel: MainViewModel

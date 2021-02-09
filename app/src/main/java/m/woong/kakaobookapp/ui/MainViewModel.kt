@@ -1,4 +1,4 @@
-package m.woong.kakaobookapp.ui.main
+package m.woong.kakaobookapp.ui
 
 import androidx.lifecycle.ViewModel
 
