@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="vm"
+            name="viewModel"
             type="m.woong.kakaobookapp.ui.MainViewModel" />
 
     </data>
@@ -37,8 +37,7 @@
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:singleLine="true"
-                android:textSize="20sp"
-                android:text="@{vm.queryData}" />
+                android:textSize="20sp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
@@ -51,7 +50,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/input_layout"
             app:layout_constraintWidth_percent="0.2"
-            android:onClick="@{() -> vm.searchBook()}"/>
+            />
+        <!--android:onClick="@{() -> viewModel.searchBooks()}"-->
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_search"
