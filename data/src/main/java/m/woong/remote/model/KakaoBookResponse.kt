@@ -1,4 +1,4 @@
-package m.woong.data.remote.model
+package m.woong.remote.model
 
 import com.google.gson.annotations.SerializedName
 

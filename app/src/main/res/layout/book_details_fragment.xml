@@ -78,7 +78,7 @@
                 android:textSize="14dp" />
 
             <TextView
-                android:id="@+id/bookDate"
+                android:id="@+id/bookDatetime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -89,7 +89,7 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvBookPrice"
+            android:id="@+id/bookPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -100,7 +100,7 @@
             android:layout_marginTop="20dp"/>
 
         <TextView
-            android:id="@+id/tvBookPublisher"
+            android:id="@+id/bookPublisher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
@@ -110,7 +110,7 @@
             android:layout_marginTop="20dp"/>
 
         <TextView
-            android:id="@+id/tvBookDetail"
+            android:id="@+id/bookContents"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
