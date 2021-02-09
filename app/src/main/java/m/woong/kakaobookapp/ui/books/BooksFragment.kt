@@ -21,7 +21,7 @@ class BooksFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        return inflater.inflate(R.layout.books_fragment, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
