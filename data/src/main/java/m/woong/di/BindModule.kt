@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import m.woong.KakaoBookRepository
-import m.woong.KakaoRepositoryImpl
+import m.woong.KakaoBookRepositoryImpl
 import m.woong.local.LocalDataSource
 import m.woong.local.LocalDataSourceImpl
 import m.woong.remote.RemoteDataSource
@@ -16,8 +16,8 @@ import m.woong.remote.RemoteDataSourceImpl
 abstract class BindModule {
 
     @Binds
-    abstract fun bindGiphyRepository(
-        kakaoRepositoryImpl: KakaoRepositoryImpl
+    abstract fun bindKakaoRepository(
+        kakaoBookRepositoryImpl: KakaoBookRepositoryImpl
     ): KakaoBookRepository
 
     @Binds

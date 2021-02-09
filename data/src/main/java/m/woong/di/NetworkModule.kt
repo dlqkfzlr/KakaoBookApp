@@ -19,11 +19,12 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideKakaoSearchApi(
-        okHttpClient: OkHttpClient
+        /*okHttpClient: OkHttpClient*/
     ): KakaoSearchApi {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .client(okHttpClient)
+            .client(OkHttpClient.Builder()
+                .build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(KakaoSearchApi::class.java)

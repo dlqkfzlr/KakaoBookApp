@@ -20,5 +20,7 @@ data class Book(
     @ColumnInfo(name = "thumbnail")
     val thumbnail: String,
     @ColumnInfo(name = "title")
-    val title: String
+    val title: String,
+    @ColumnInfo(name = "is_favorite")
+    val isFavorite: Boolean = false
 )
