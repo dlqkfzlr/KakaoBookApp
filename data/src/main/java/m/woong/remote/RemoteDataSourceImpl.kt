@@ -1,4 +1,4 @@
-package m.woong.data.remote
+package m.woong.remote
 
 class RemoteDataSourceImpl: RemoteDataSource {
 }
