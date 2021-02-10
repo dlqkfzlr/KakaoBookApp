@@ -1,4 +1,4 @@
-package m.woong.kakaobookapp.ui.books
+package m.woong.kakaobookapp.ui.search
 
 import m.woong.kakaobookapp.ui.model.Book
 

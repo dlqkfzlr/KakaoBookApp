@@ -1,4 +1,4 @@
-package m.woong.kakaobookapp.ui.books
+package m.woong.kakaobookapp.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,24 +7,23 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import m.woong.kakaobookapp.R
 import m.woong.kakaobookapp.databinding.BookViewItemBinding
-import m.woong.kakaobookapp.ui.details.FavoriteCallBack
 import m.woong.kakaobookapp.ui.model.Book
 
-class BooksPagingAdapter(
+class SearchBookPagingAdapter(
     private val mCallback: SelectCallBack
-): PagingDataAdapter<Book, BookViewholder>(DIFF_UTIL) {
+): PagingDataAdapter<Book, SearchBookViewholder>(DIFF_UTIL) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewholder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchBookViewholder {
         val binding = DataBindingUtil.inflate<BookViewItemBinding>(
             LayoutInflater.from(parent.context),
             R.layout.book_view_item,
             parent,
             false
         )
-        return BookViewholder(binding, mCallback)
+        return SearchBookViewholder(binding, mCallback)
     }
 
-    override fun onBindViewHolder(holder: BookViewholder, position: Int) {
+    override fun onBindViewHolder(holder: SearchBookViewholder, position: Int) {
         getItem(position)?.let { holder.onBind(it) }
     }
 

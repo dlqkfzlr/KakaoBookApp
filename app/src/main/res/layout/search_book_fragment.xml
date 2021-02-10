@@ -7,7 +7,6 @@
         <variable
             name="viewModel"
             type="m.woong.kakaobookapp.ui.MainViewModel" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,45 +15,52 @@
         android:layout_height="match_parent"
         tools:context=".ui.search.SearchFragment">
 
+        <Spinner
+            android:id="@+id/searchSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:spinnerMode="dropdown"
+            app:layout_constraintBottom_toBottomOf="@+id/input_layout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            app:layout_constraintWidth_percent="0.8"
-            app:layout_constraintEnd_toStartOf="@id/btn_search"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:layout_constraintStart_toEndOf="@+id/searchSpinner"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.8">
+
             <EditText
-                android:id="@+id/et_search"
+                android:id="@+id/etSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="검색어를 입력해주세요"
+                android:hint="@string/search_book_query_hint"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:singleLine="true"
-                android:textSize="20sp"/>
+                android:textSize="16sp"
+                android:text="@={viewModel.queryData}"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
-            android:id="@+id/btn_search"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/btnSearch"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginEnd="8dp"
+            android:background="@drawable/bg_square_round_4"
             android:src="@drawable/ic_search_24"
             app:layout_constraintBottom_toBottomOf="@+id/input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/input_layout"
             app:layout_constraintWidth_percent="0.2"
-            />
-        <!--android:onClick="@{() -> viewModel.searchBooks()}"-->
+            android:onClick="@{() -> viewModel.searchBooks()}" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_search"
+            android:id="@+id/rvSearch"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
