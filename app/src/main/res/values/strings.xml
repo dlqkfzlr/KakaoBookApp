@@ -9,4 +9,6 @@
     <string name="failure_book_non_existent">Book Not Existent.</string>
 
     <string name="content_description_empty">No content description.</string>
+
+    <string name="search_book_query_hint">검색어를 입력해주세요</string>
 </resources>
