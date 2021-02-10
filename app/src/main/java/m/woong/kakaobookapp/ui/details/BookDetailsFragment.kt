@@ -1,6 +1,7 @@
 package m.woong.kakaobookapp.ui.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,8 @@ import m.woong.kakaobookapp.R
 import m.woong.kakaobookapp.databinding.BookDetailsFragmentBinding
 import m.woong.kakaobookapp.ui.MainViewModel
 import m.woong.kakaobookapp.ui.books.BooksFragment
+import m.woong.kakaobookapp.ui.model.Book
+import m.woong.kakaobookapp.utils.setParsedHtmlText
 import m.woong.kakaobookapp.utils.setUrl
 
 @AndroidEntryPoint
@@ -18,6 +21,7 @@ class BookDetailsFragment: Fragment(R.layout.book_details_fragment), FavoriteCal
 
     companion object {
         fun newInstance() = BookDetailsFragment()
+        val TAG = BookDetailsFragment::class.java.simpleName
     }
 
     private val viewModel: MainViewModel by activityViewModels()
@@ -35,15 +39,22 @@ class BookDetailsFragment: Fragment(R.layout.book_details_fragment), FavoriteCal
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         _binding = BookDetailsFragmentBinding.bind(view)
-        with(binding) {
-            bookContents.text = "bookContents"
-            bookDatetime.text = "bookDatetime"
-            bookPrice.text = "bookPrice"
-            bookPublisher.text = "bookPublisher"
-            bookTitle.text = "bookTitle"
-            ivBookCover.setUrl("https://miro.medium.com/max/725/1*xYXHOHl5bmO8peICcGbA_w.png")
+        arguments?.let { args ->
+            val book: Book? = args.getParcelable("BOOK_ITEM")
+            book?.let { setViewContent(it) }
         }
 
+    }
+
+    private fun setViewContent(book: Book){
+        with(binding) {
+            bookContents.setParsedHtmlText(book.contents)
+            bookDatetime.text = book.datetime
+            bookPrice.text = book.price.toString()
+            bookPublisher.text = book.publisher
+            bookTitle.text = book.title
+            ivBookCover.setUrl(book.thumbnail)
+        }
     }
 
     override fun checkFavorite(isbn: String) {

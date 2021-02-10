@@ -7,9 +7,12 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import m.woong.kakaobookapp.R
 import m.woong.kakaobookapp.databinding.BookViewItemBinding
+import m.woong.kakaobookapp.ui.details.FavoriteCallBack
 import m.woong.kakaobookapp.ui.model.Book
 
-class BooksPagingAdapter: PagingDataAdapter<Book, BookViewholder>(DIFF_UTIL) {
+class BooksPagingAdapter(
+    private val mCallback: SelectCallBack
+): PagingDataAdapter<Book, BookViewholder>(DIFF_UTIL) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewholder {
         val binding = DataBindingUtil.inflate<BookViewItemBinding>(
@@ -18,7 +21,7 @@ class BooksPagingAdapter: PagingDataAdapter<Book, BookViewholder>(DIFF_UTIL) {
             parent,
             false
         )
-        return BookViewholder(binding)
+        return BookViewholder(binding, mCallback)
     }
 
     override fun onBindViewHolder(holder: BookViewholder, position: Int) {

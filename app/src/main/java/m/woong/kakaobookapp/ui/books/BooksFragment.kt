@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.paging.PagingData
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.coroutineScope
@@ -42,7 +43,7 @@ class BooksFragment : Fragment(), SelectCallBack {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = BooksPagingAdapter()
+        adapter = BooksPagingAdapter(this)
         binding.rvSearch.adapter = adapter
         viewModel.searchBooks("Love")
         viewModel.bookList.observe(viewLifecycleOwner,
@@ -55,5 +56,10 @@ class BooksFragment : Fragment(), SelectCallBack {
 
     override fun selectBook(book: Book) {
         // 네비게이션 처리
+        val bundle = Bundle().apply {
+            putParcelable("BOOK_ITEM", book)
+        }
+        Navigation.findNavController(binding.root)
+            .navigate(R.id.action_books_to_details,bundle)
     }
 }
