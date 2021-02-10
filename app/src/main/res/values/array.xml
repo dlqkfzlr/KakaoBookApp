@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="search_book_target_type">
+        <item>제목</item>
+        <item>ISBN</item>
+        <item>출판사</item>
+        <item>저자</item>
+    </string-array>
+</resources>
