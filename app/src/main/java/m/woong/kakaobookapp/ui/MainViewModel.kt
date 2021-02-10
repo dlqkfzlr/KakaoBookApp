@@ -11,7 +11,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import m.woong.KakaoBookRepository
 import m.woong.kakaobookapp.ui.model.Book
-import m.woong.remote.enum.KakaoSearchBookTargetType
+import m.woong.remote.enums.KakaoSearchBookTargetType
+import m.woong.remote.enums.KakaoSearchBookTargetType.*
 import m.woong.remote.model.wrapper.ResWrapper
 import javax.inject.Inject
 
@@ -27,6 +28,10 @@ class MainViewModel @Inject constructor(
 
     private var currentBookList: Flow<PagingData<Book>>? = null
 
+    private var _targetType = MutableLiveData<KakaoSearchBookTargetType>()
+    private val targetType: LiveData<KakaoSearchBookTargetType>
+        get() = _targetType
+
     private var _query = MutableLiveData<String>()
     val query: LiveData<String> = _query
 
@@ -34,17 +39,32 @@ class MainViewModel @Inject constructor(
     val bookList: LiveData<List<Book>>
         get() = _bookList
 
-    fun searchBooks(query: String) {
+    fun selectTargetType(position: Int){
+        val type = when(position){
+            0 -> TITLE
+            1 -> ISBN
+            2 -> PUBLISHER
+            else -> PERSON
+        }
+        _targetType.postValue(type)
+    }
+
+    fun searchBooks() {
+        Log.d(TAG, "searchBooks 호출")
         viewModelScope.launch {
-            fetchBooks(query)
+            if (!queryData.value.isNullOrBlank()){
+                fetchBooks(queryData.value!!, targetType.value)
+            } else {
+                Log.d(TAG, "Search중단 queryData:${queryData.value}")
+            }
         }
     }
 
-    private suspend fun fetchBooks(query: String) {
-        val response = repository.searchBook(query, 1, KakaoSearchBookTargetType.TITLE)
+    private suspend fun fetchBooks(query: String, type: KakaoSearchBookTargetType?) {
+        val response = repository.searchBook(query, 1, type)
+        Log.d(TAG, "Search시작 query:$query, type:$type")
         when (response) {
             is ResWrapper.Success -> {
-                Log.d(TAG, "Success response:$response")
                 val books = response.value.documents
                     .map {
                         Book(
