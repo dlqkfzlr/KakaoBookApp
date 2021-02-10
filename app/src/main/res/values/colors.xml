@@ -13,7 +13,7 @@
     <color name="colorAccent">#FFC107</color>
     <color name="colorSecondary">#FF9800</color>
     <color name="colorTextPrimary">@color/black</color>
-    <color name="colorTextSecondary">#FF9800</color>
+    <color name="colorTextSecondary">#291D0D</color>
 
     <color name="translucentBackground">#4F5254</color>
 </resources>
