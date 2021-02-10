@@ -9,7 +9,7 @@
             type="m.woong.kakaobookapp.ui.model.Book" />
         <variable
             name="callback"
-            type="m.woong.kakaobookapp.ui.books.SelectCallBack" />
+            type="m.woong.kakaobookapp.ui.search.SelectCallBack" />
     </data>
 
     <LinearLayout
@@ -86,7 +86,7 @@
             android:layout_margin="10dp"
             android:background="@drawable/selector_favorite"
             android:clickable="false"
-            android:checked="@{!book.isFavorite}"
+            android:checked="@{book.isFavorite}"
             android:text="@null"
             android:textOn="@null"
             android:textOff="@null"/>

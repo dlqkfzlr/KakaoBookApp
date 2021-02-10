@@ -1,9 +1,8 @@
 package m.woong.network
 
-import m.woong.remote.enum.KakaoSearchBookTargetType
-import m.woong.remote.enum.KakaoSearchSortType
+import m.woong.remote.enums.KakaoSearchBookTargetType
+import m.woong.remote.enums.KakaoSearchSortType
 import m.woong.remote.model.KakaoBookResponse
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query

@@ -1,4 +1,4 @@
-package m.woong.remote.enum
+package m.woong.remote.enums
 
 import com.google.gson.annotations.SerializedName
 

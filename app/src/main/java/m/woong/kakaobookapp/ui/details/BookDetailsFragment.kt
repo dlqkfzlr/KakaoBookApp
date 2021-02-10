@@ -1,7 +1,6 @@
 package m.woong.kakaobookapp.ui.details
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import m.woong.kakaobookapp.R
 import m.woong.kakaobookapp.databinding.BookDetailsFragmentBinding
 import m.woong.kakaobookapp.ui.MainViewModel
-import m.woong.kakaobookapp.ui.books.BooksFragment
 import m.woong.kakaobookapp.ui.model.Book
 import m.woong.kakaobookapp.utils.setParsedHtmlText
 import m.woong.kakaobookapp.utils.setUrl
