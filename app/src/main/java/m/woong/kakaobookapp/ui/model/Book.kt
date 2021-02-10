@@ -1,4 +1,5 @@
 package m.woong.kakaobookapp.ui.model
+
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 

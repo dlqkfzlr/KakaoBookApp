@@ -3,24 +3,24 @@ package m.woong.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "book")
 data class Book(
-    @PrimaryKey
-    @ColumnInfo(name = "isbn")
+    @PrimaryKey @field:SerializedName("isbn")
     val isbn: String,
-    @ColumnInfo(name = "contents")
+    @field:SerializedName("contents")
     val contents: String,
-    @ColumnInfo(name = "datetime")
+    @field:SerializedName("datetime")
     val datetime: String,
-    @ColumnInfo(name = "price")
+    @field:SerializedName("price")
     val price: Int,
-    @ColumnInfo(name = "publisher")
+    @field:SerializedName("publisher")
     val publisher: String,
-    @ColumnInfo(name = "thumbnail")
+    @field:SerializedName("thumbnail")
     val thumbnail: String,
-    @ColumnInfo(name = "title")
+    @field:SerializedName("title")
     val title: String,
-    @ColumnInfo(name = "is_favorite")
+    @field:SerializedName("is_favorite")
     val isFavorite: Boolean = false
 )
