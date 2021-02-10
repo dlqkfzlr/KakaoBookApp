@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/booksScreen"
-        android:name="m.woong.kakaobookapp.ui.books.BooksFragment"
+        android:name="m.woong.kakaobookapp.ui.search.SearchBookFragment"
         android:label="Books"
-        tools:layout="@layout/books_fragment">
+        tools:layout="@layout/search_book_fragment">
 
         <action
             android:id="@+id/action_books_to_details"
