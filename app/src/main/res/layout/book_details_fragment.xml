@@ -1,124 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:fillViewport="true">
 
-    <ScrollView
-        android:id="@+id/svBookDetails"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_horz2"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_vert2"
-        app:layout_constraintStart_toStartOf="@+id/guideline_vert1"
-        app:layout_constraintTop_toTopOf="@+id/guideline_horz1" />
-    <ImageView
-        android:id="@+id/ivBookCover"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline_horz2"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_vert2"
-        app:layout_constraintStart_toStartOf="@+id/guideline_vert1"
-        app:layout_constraintTop_toTopOf="@+id/guideline_horz1" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_vert1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.2" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideVert1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.2" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_vert2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.8" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideVert2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_horz1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.1" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideHorz1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_horz2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideHorz2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline_vert2"
-        app:layout_constraintStart_toStartOf="@+id/guideline_vert1"
-        app:layout_constraintTop_toBottomOf="@+id/ivBookCover">
+        <ImageView
+            android:id="@+id/ivBookCover"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/guideHorz2"
+            app:layout_constraintEnd_toStartOf="@+id/guideVert2"
+            app:layout_constraintStart_toStartOf="@+id/guideVert1"
+            app:layout_constraintTop_toTopOf="@+id/guideHorz1"
+            tools:src="@tools:sample/avatars" />
+
 
         <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:layout_marginTop="20dp">
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@+id/guideVert2"
+            app:layout_constraintStart_toStartOf="@+id/guideVert1"
+            app:layout_constraintTop_toBottomOf="@+id/ivBookCover">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/bookTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textSize="14dp" />
+
+                <TextView
+                    android:id="@+id/bookDatetime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textSize="14dp" />
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/bookTitle"
-                android:layout_width="0dp"
+                android:id="@+id/bookPrice"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:maxLines="1"
+                android:layout_marginTop="20dp"
                 android:ellipsize="end"
-                android:text="책 이름: 카카오페이카카오페이카카오페이"
+                android:maxLines="1"
                 android:textSize="14dp" />
 
             <TextView
-                android:id="@+id/bookDatetime"
-                android:layout_width="0dp"
+                android:id="@+id/bookPublisher"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:maxLines="1"
+                android:layout_marginTop="20dp"
                 android:ellipsize="end"
-                android:text="책 이름: 카카오페이카카오페이카카오페이"
+                android:maxLines="1"
                 android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/bookContents"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:ellipsize="end"
+                android:textSize="14dp" />
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/bookPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:text="책 가격: 카카오페이카카오페이카카오페이"
-            android:textSize="14dp"
-            android:layout_marginTop="20dp"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/bookPublisher"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:maxLines="1"
-            android:ellipsize="end"
-            android:text="출판사: 카카오페이카카오페이카카오페이"
-            android:textSize="14dp"
-            android:layout_marginTop="20dp"/>
-
-        <TextView
-            android:id="@+id/bookContents"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:text="책 설명: 카카오페이카카오페이카카오페이카카오페이카카오페이카카오페이카카오페이카카오페이카카오페이카카오페이카카오페이카카오페이"
-            android:textSize="14dp"
-            android:layout_marginTop="20dp"/>
-
-    </LinearLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

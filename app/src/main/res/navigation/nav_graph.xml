@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/booksScreen">
+
+    <fragment
+        android:id="@+id/booksScreen"
+        android:name="m.woong.kakaobookapp.ui.books.BooksFragment"
+        android:label="Books"
+        tools:layout="@layout/books_fragment">
+
+        <action
+            android:id="@+id/action_books_to_details"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"
+            app:destination="@+id/detailsScreen"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailsScreen"
+        android:name="m.woong.kakaobookapp.ui.details.BookDetailsFragment"
+        android:label="Details"
+        tools:layout="@layout/book_details_fragment"/>
+
+</navigation>

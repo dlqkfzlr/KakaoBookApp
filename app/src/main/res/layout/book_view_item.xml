@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bind="http://schemas.android.com/tools">
+    xmlns:bind="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="book"
             type="m.woong.kakaobookapp.ui.model.Book" />
+        <variable
+            name="callback"
+            type="m.woong.kakaobookapp.ui.books.SelectCallBack" />
     </data>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:onClick="@{() -> callback.selectBook(book)}">
 
         <ImageView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="6dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_margin="10dp"
             android:contentDescription="No Content Description"
+            tools:src="@tools:sample/avatars"
             bind:imageUrl="@{book.thumbnail}"/>
 
         <LinearLayout
@@ -69,13 +75,21 @@
 
         </LinearLayout>
 
-        <ToggleButton
-            android:layout_width="0dp"
+        <Space
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_margin="6dp"
+            android:layout_weight="1"/>
+
+        <ToggleButton
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="10dp"
             android:background="@drawable/selector_favorite"
-            android:checked="@{!book.isFavorite}"/>
+            android:clickable="false"
+            android:checked="@{!book.isFavorite}"
+            android:text="@null"
+            android:textOn="@null"
+            android:textOff="@null"/>
 
     </LinearLayout>
 </layout>
