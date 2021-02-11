@@ -1,5 +1,6 @@
 package m.woong.kakaobookapp.utils
 
+import android.annotation.SuppressLint
 import android.text.Html
 import android.widget.ImageView
 import android.widget.TextView
@@ -27,6 +28,16 @@ fun TextView.setParsedHtmlText(text: String) {
     } else {
         this.text = Html.fromHtml(text).toString()
     }
+}
+
+@BindingAdapter("date")
+fun TextView.setDate(dateTime: String) {
+    this.text = dateTime.toDate()
+}
+
+@BindingAdapter("koreanWon")
+fun TextView.setKoreanWon(price: String) {
+    this.text = price.toKoreanWon()
 }
 
 /* ToggleButton */
