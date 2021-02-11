@@ -27,14 +27,14 @@
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/input_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="200dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
+            android:layout_margin="4dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnSearch"
             app:layout_constraintStart_toEndOf="@+id/searchSpinner"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.8">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,17 +42,18 @@
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:singleLine="true"
-                android:textSize="16sp"
-                android:text="@={viewModel.queryData}"/>
+                android:text="@={viewModel.queryData}"
+                android:textSize="16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <ImageButton
             android:id="@+id/btnSearch"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:background="@drawable/bg_square_round_4"
             android:src="@drawable/ic_search_24"
+            android:contentDescription="@string/content_description_empty"
             app:layout_constraintBottom_toBottomOf="@+id/input_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/input_layout"

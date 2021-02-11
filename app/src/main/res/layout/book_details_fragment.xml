@@ -8,7 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideVert1"
@@ -38,6 +38,17 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.5" />
 
+        <ToggleButton
+            android:id="@+id/tbBookFavorite"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/selector_favorite"
+            android:text="@null"
+            android:textOff="@null"
+            android:textOn="@null"
+            app:layout_constraintBottom_toTopOf="@+id/guideHorz1"
+            app:layout_constraintStart_toStartOf="@+id/guideVert2" />
+
         <ImageView
             android:id="@+id/ivBookCover"
             android:layout_width="0dp"
@@ -53,8 +64,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintEnd_toStartOf="@+id/guideVert2"
-            app:layout_constraintStart_toStartOf="@+id/guideVert1"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ivBookCover">
 
             <LinearLayout

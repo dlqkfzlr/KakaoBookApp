@@ -23,14 +23,14 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_margin="10dp"
-            android:contentDescription="No Content Description"
+            android:contentDescription="@string/content_description_empty"
             tools:src="@tools:sample/avatars"
             bind:imageUrl="@{book.thumbnail}"/>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="6"
             android:orientation="vertical">
 
             <LinearLayout
@@ -47,14 +47,18 @@
                     android:ellipsize="end"
                     android:text="@{book.title}" />
 
-                <TextView
-                    android:id="@+id/bookDatetime"
+                <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.1"/>
+
+                <TextView
+                    android:id="@+id/bookDatetime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:ellipsize="end"
-                    android:text="@{book.datetime}" />
+                    bind:date="@{book.datetime}"/>
             </LinearLayout>
 
             <TextView
@@ -71,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:ellipsize="end"
-                android:text="@{String.valueOf(book.price)}" />
+                bind:koreanWon="@{String.valueOf(book.price)}" />
 
         </LinearLayout>
 

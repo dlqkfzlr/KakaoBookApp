@@ -1,5 +1,6 @@
 package m.woong.kakaobookapp.ui.details
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,8 +12,10 @@ import m.woong.kakaobookapp.R
 import m.woong.kakaobookapp.databinding.BookDetailsFragmentBinding
 import m.woong.kakaobookapp.ui.MainViewModel
 import m.woong.kakaobookapp.ui.model.Book
+import m.woong.kakaobookapp.utils.toKoreanWon
 import m.woong.kakaobookapp.utils.setParsedHtmlText
 import m.woong.kakaobookapp.utils.setUrl
+import m.woong.kakaobookapp.utils.toDate
 
 @AndroidEntryPoint
 class BookDetailsFragment: Fragment(R.layout.book_details_fragment), FavoriteCallBack {
@@ -44,16 +47,19 @@ class BookDetailsFragment: Fragment(R.layout.book_details_fragment), FavoriteCal
 
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setViewContent(book: Book){
         with(binding) {
-            bookContents.setParsedHtmlText(book.contents)
-            bookDatetime.text = book.datetime
-            bookPrice.text = book.price.toString()
-            bookPublisher.text = book.publisher
-            bookTitle.text = book.title
             ivBookCover.setUrl(book.thumbnail)
+            bookTitle.text = "책 이름: ${book.title}"
+            bookDatetime.text = "출시일: ${book.datetime.toDate()}"
+            bookPrice.text = "책 가격: ${book.price.toString().toKoreanWon()}"
+            bookPublisher.text = "출판사: ${book.publisher}"
+            bookContents.setParsedHtmlText(book.contents)
         }
     }
+
+
 
     override fun checkFavorite(isbn: String) {
 //        viewModel.updateFavorite
