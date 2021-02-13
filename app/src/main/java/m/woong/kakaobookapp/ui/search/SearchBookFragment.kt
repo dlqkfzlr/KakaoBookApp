@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -94,19 +95,19 @@ class SearchBookFragment : Fragment(), SelectCallBack {
     }
 
     private fun setEditTextIMEListener() {
-        binding.etSearch.setOnEditorActionListener { v, actionId, event ->
-            return@setOnEditorActionListener when(actionId){
-                EditorInfo.IME_ACTION_SEARCH -> {
-                    viewModel.searchBooks()
-                    true
-                }
-                else -> false
+        binding.etSearch.setOnEditorActionListener { _, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH    // soft keyboard
+                || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)){    // hard keyboard
+                viewModel.searchBooks()
+                true
+            } else {
+                false
             }
         }
 
     }
 
-    fun hideKeyboard(activity: Activity) {
+    private fun hideKeyboard(activity: Activity) {
         if (activity.currentFocus != null) {
             val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
