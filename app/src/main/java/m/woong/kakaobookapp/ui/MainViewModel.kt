@@ -1,21 +1,21 @@
 package m.woong.kakaobookapp.ui
 
-import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import m.woong.kakaobookapp.data.KakaoBookRepository
 import m.woong.kakaobookapp.data.remote.enums.KakaoSearchBookTargetType
 import m.woong.kakaobookapp.data.remote.enums.KakaoSearchBookTargetType.*
 import m.woong.kakaobookapp.ui.model.Book
-import m.woong.kakaobookapp.data.local.entity.Book as dbBook
 import javax.inject.Inject
+import m.woong.kakaobookapp.data.local.entity.Book as DbBook
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -27,25 +27,23 @@ class MainViewModel @Inject constructor(
         MutableLiveData<String>()
     }
 
-    private var currentQueryValue: String? = null
-    private var currentTargetValue: KakaoSearchBookTargetType? = TITLE
-    private var currentBookList: Flow<PagingData<Book>>? = null
-
-
-    val bookList: LiveData<PagingData<Book>?> = searchBooks()
-        .asLiveData(Dispatchers.Main)
-
-
     private var _targetType = MutableLiveData<KakaoSearchBookTargetType>()
     private val targetType: LiveData<KakaoSearchBookTargetType>
         get() = _targetType
 
-    private var _query = MutableLiveData<String>()
-    val query: LiveData<String> = _query
+    private var _bookList = MutableLiveData<PagingData<Book>>()
+    val bookList: LiveData<PagingData<Book>>
+        get() = _bookList
 
-    /*private var _bookList = MutableLiveData<List<Book>>()
-    val bookList: LiveData<List<Book>>
-        get() = _bookList*/
+    private var currentQueryValue: String? = null
+    private var currentBookList: Flow<PagingData<Book>>? = null
+
+    private var searchJob: Job? = null
+
+    override fun onCleared() {
+        super.onCleared()
+        searchJob = null
+    }
 
     fun selectTargetType(position: Int) {
         val type = when (position) {
@@ -57,12 +55,15 @@ class MainViewModel @Inject constructor(
         _targetType.postValue(type)
     }
 
-    fun searchBooks(): Flow<PagingData<Book>?> {
-        Log.d(TAG, "searchBooks 호출")
-        return if (!queryData.value.isNullOrBlank()) {
-            fetchBookStream(queryData.value!!, targetType.value)
-        } else {
-            flowOf(null)
+    fun searchBooks() {
+        if (!queryData.value.isNullOrBlank()) {
+            searchJob?.cancel()
+            searchJob = viewModelScope.launch {
+                fetchBookStream(
+                    queryData.value!!,
+                    targetType.value
+                ).collectLatest { _bookList.value = it }
+            }
         }
     }
 
@@ -80,47 +81,39 @@ class MainViewModel @Inject constructor(
             .cachedIn(viewModelScope)
     }
 
-    /*private suspend fun fetchBooks(query: String, type: KakaoSearchBookTargetType?) {
-        val response = repository.searchBook(query, 1, type)
-        Log.d(TAG, "Search시작 query:$query, type:$type")
-        when (response) {
-            is ResWrapper.Success -> {
-                val books = response.value.documents
-                    .map {
-                        Book(
-                            isbn = it.isbn,
-                            contents = it.contents,
-                            datetime = it.datetime,
-                            price = it.price,
-                            publisher = it.publisher,
-                            thumbnail = it.thumbnail,
-                            title = it.title,
-                            isFavorite = false
-                        )
-                    }
-                _bookList.value = books
-            }
-            is ResWrapper.Error -> {
-                Log.d(TAG, "Error response:${response}")
-            }
+    fun updateFavorite(book: Book) {
+        book.isFavorite = !book.isFavorite
+        viewModelScope.launch {
+            repository.updateBook(uiBookToDbBook(book))
         }
-    }*/
+    }
 
-    private fun pagedBookMapper(pagingData: PagingData<dbBook>): PagingData<Book> =
-        pagingData.map {
-            Book(
-                it.isbn,
-                it.contents,
-                it.datetime,
-                it.price,
-                it.publisher,
-                it.thumbnail,
-                it.title,
-                it.isFavorite
-            )
-        }
+    private fun pagedBookMapper(pagingData: PagingData<DbBook>): PagingData<Book> =
+        pagingData.map { dbBookToUiBook(it) }
 
-companion object {
-    private val TAG = MainViewModel::class.java.simpleName
-}
+    private fun dbBookToUiBook(dbBook: DbBook): Book = Book(
+        dbBook.isbn,
+        dbBook.contents,
+        dbBook.datetime,
+        dbBook.price,
+        dbBook.publisher,
+        dbBook.thumbnail,
+        dbBook.title,
+        dbBook.isFavorite
+    )
+
+    private fun uiBookToDbBook(book: Book): DbBook = DbBook(
+        book.isbn,
+        book.contents,
+        book.datetime,
+        book.price,
+        book.publisher,
+        book.thumbnail,
+        book.title,
+        book.isFavorite
+    )
+
+    companion object {
+        val PAGING_TAG = "PAGING_TAG"
+    }
 }
