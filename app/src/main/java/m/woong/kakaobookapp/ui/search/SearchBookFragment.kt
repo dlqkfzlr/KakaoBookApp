@@ -3,7 +3,6 @@ package m.woong.kakaobookapp.ui.search
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -18,9 +17,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
+import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChangedBy
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import m.woong.kakaobookapp.R
 import m.woong.kakaobookapp.databinding.SearchBookFragmentBinding
@@ -46,9 +47,9 @@ class SearchBookFragment : Fragment(), SelectCallBack {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setSpinner()
-        setEditTextListener()
-        setPagingAdapter()
+        initSpinner()
+        initEditTextListener()
+        initPagingAdapter()
     }
 
     override fun selectBook(book: Book) {
@@ -59,9 +60,12 @@ class SearchBookFragment : Fragment(), SelectCallBack {
             .navigate(R.id.action_books_to_details, bundle)
     }
 
-    private fun setPagingAdapter() {
+    private fun initPagingAdapter() {
         adapterBook = SearchBookPagingAdapter(this)
-        binding.rvSearch.adapter = adapterBook
+        binding.rvSearch.adapter = adapterBook.withLoadStateHeaderAndFooter(
+            header = BookLoadStateAdapter(adapterBook::retry),
+            footer = BookLoadStateAdapter(adapterBook::retry)
+        )
         viewModel.bookList.observe(viewLifecycleOwner,
             Observer { pagingData ->
                 hideKeyboard(requireActivity())
@@ -69,9 +73,16 @@ class SearchBookFragment : Fragment(), SelectCallBack {
                     adapterBook.submitData(pagingData)
                 }
             })
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            adapterBook.loadStateFlow
+                .distinctUntilChangedBy { it.refresh }
+                .filter { it.refresh is LoadState.NotLoading }
+                .collect { binding.rvSearch.scrollToPosition(0) }
+        }
     }
 
-    private fun setSpinner() {
+    private fun initSpinner() {
         val item = resources.getStringArray(R.array.search_book_target_type)
         val arrAdapter =
             ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, item)
@@ -95,7 +106,7 @@ class SearchBookFragment : Fragment(), SelectCallBack {
         }
     }
 
-    private fun setEditTextListener() {
+    private fun initEditTextListener() {
         binding.etSearch.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH    // soft keyboard
                 || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)    // hard keyboard
