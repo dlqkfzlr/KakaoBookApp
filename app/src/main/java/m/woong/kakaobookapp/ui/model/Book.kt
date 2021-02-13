@@ -12,5 +12,5 @@ data class Book(
     val publisher: String,
     val thumbnail: String,
     val title: String,
-    val isFavorite: Boolean
+    var isFavorite: Boolean
 ): Parcelable
