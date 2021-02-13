@@ -11,7 +11,7 @@ interface LocalDataSource {
     suspend fun updateBook(book: Book): Int
     suspend fun clearBooks()
 
-    suspend fun saveRemoteKeys(remoteKeys: List<RemoteKey>)
+    suspend fun saveRemoteKeys(remoteKeys: List<RemoteKey>): List<Long>
     suspend fun getRemoteKeyWithIsbn(isbn: String): RemoteKey?
     suspend fun clearRemoteKeys()
 }

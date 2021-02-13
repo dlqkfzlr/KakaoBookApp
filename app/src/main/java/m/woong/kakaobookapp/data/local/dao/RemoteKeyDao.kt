@@ -1,5 +1,6 @@
 package m.woong.kakaobookapp.data.local.dao
 
+import android.util.Log
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -9,7 +10,7 @@ import m.woong.kakaobookapp.data.local.entity.RemoteKey
 @Dao
 interface RemoteKeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRemoteKeys(remoteKeys: List<RemoteKey>)
+    suspend fun insertRemoteKeys(remoteKeys: List<RemoteKey>): List<Long>
 
     @Query("SELECT * FROM remote_key WHERE isbn = :isbn")
     suspend fun selectRemoteKeyWithIsbn(isbn: String): RemoteKey?

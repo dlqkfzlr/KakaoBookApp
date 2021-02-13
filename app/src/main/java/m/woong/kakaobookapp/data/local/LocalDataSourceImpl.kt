@@ -1,5 +1,6 @@
 package m.woong.kakaobookapp.data.local
 
+import android.util.Log
 import androidx.paging.PagingSource
 import m.woong.kakaobookapp.data.local.dao.BookDao
 import m.woong.kakaobookapp.data.local.dao.RemoteKeyDao
@@ -28,8 +29,8 @@ class LocalDataSourceImpl @Inject constructor(
         bookDao.deleteBooks()
     }
 
-    override suspend fun saveRemoteKeys(remoteKeys: List<RemoteKey>) {
-        remoteKeyDao.insertRemoteKeys(remoteKeys)
+    override suspend fun saveRemoteKeys(remoteKeys: List<RemoteKey>): List<Long> {
+        return remoteKeyDao.insertRemoteKeys(remoteKeys)
     }
 
     override suspend fun getRemoteKeyWithIsbn(isbn: String): RemoteKey? {
