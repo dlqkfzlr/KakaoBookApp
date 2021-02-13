@@ -5,11 +5,13 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import m.woong.kakaobookapp.data.KakaoBookRepository
 import m.woong.kakaobookapp.data.remote.enums.KakaoSearchBookTargetType
 import m.woong.kakaobookapp.data.remote.enums.KakaoSearchBookTargetType.*
@@ -59,10 +61,12 @@ class MainViewModel @Inject constructor(
         if (!queryData.value.isNullOrBlank()) {
             searchJob?.cancel()
             searchJob = viewModelScope.launch {
-                fetchBookStream(
-                    queryData.value!!,
-                    targetType.value
-                ).collectLatest { _bookList.value = it }
+                withContext(Dispatchers.IO) {
+                    fetchBookStream(
+                        queryData.value!!,
+                        targetType.value
+                    ).collectLatest { _bookList.value = it }
+                }
             }
         }
     }
@@ -84,7 +88,9 @@ class MainViewModel @Inject constructor(
     fun updateFavorite(book: Book) {
         book.isFavorite = !book.isFavorite
         viewModelScope.launch {
-            repository.updateBook(uiBookToDbBook(book))
+            withContext(Dispatchers.IO){
+                repository.updateBook(uiBookToDbBook(book))
+            }
         }
     }
 
