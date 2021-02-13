@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView
 import m.woong.kakaobookapp.databinding.BookViewItemBinding
 import m.woong.kakaobookapp.ui.model.Book
 
-class SearchBookViewholder(private val binding: BookViewItemBinding,
+class SearchBookViewHolder(private val binding: BookViewItemBinding,
                            private val mCallback: SelectCallBack
 ) :
     RecyclerView.ViewHolder(binding.root) {
