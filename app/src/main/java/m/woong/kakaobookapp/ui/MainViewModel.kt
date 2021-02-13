@@ -65,7 +65,7 @@ class MainViewModel @Inject constructor(
                     fetchBookStream(
                         queryData.value!!,
                         targetType.value
-                    ).collectLatest { _bookList.value = it }
+                    ).collectLatest { _bookList.postValue(it) }
                 }
             }
         }
