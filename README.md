@@ -15,5 +15,6 @@ Sample Android App using Kakao Book API for book searching
 - Glide
 - Hilt
 - LiveData
+- Navigation
 - Paging 3
 - Room
