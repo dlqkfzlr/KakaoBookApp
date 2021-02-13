@@ -20,12 +20,15 @@ abstract class KakaoDatabase : RoomDatabase() {
     abstract fun remoteKeyDao(): RemoteKeyDao
 
     companion object{
-        val DATABASE_NAME = "kakao.db"
-        @Volatile private var instance : KakaoDatabase? = null
-        private val LOCK = Any()
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK){
-            instance ?: buildDatabase(context).also {
-                instance = it
+        private const val DATABASE_NAME = "kakao.db"
+
+        @Volatile
+        private var INSTANCE : KakaoDatabase? = null
+
+//        private val LOCK = Any()
+        operator fun invoke(context: Context) = INSTANCE ?: synchronized(this){
+            INSTANCE ?: buildDatabase(context).also {
+                INSTANCE = it
             }
         }
 

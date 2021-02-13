@@ -9,6 +9,7 @@ import m.woong.kakaobookapp.data.remote.RemoteDataSource
 import m.woong.kakaobookapp.data.remote.base.BaseRepository
 import m.woong.kakaobookapp.data.remote.enums.KakaoSearchBookTargetType
 import kotlinx.coroutines.flow.Flow
+import m.woong.kakaobookapp.data.local.db.KakaoDatabase
 import m.woong.kakaobookapp.paging.BookSearchRemoteMediator
 import m.woong.kakaobookapp.data.network.KakaoSearchApi.Companion.BOOK_PAGING_SIZE
 import javax.inject.Inject

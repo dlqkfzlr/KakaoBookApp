@@ -11,6 +11,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -62,10 +64,30 @@ class SearchBookFragment : Fragment(), SelectCallBack {
 
     private fun initPagingAdapter() {
         adapterBook = SearchBookPagingAdapter(this)
-        binding.rvSearch.adapter = adapterBook.withLoadStateHeaderAndFooter(
-            header = BookLoadStateAdapter(adapterBook::retry),
-            footer = BookLoadStateAdapter(adapterBook::retry)
-        )
+        binding.rvSearch.adapter = adapterBook.apply {
+            withLoadStateHeaderAndFooter(
+                header = BookLoadStateAdapter(adapterBook::retry),
+                footer = BookLoadStateAdapter(adapterBook::retry)
+            )
+            addLoadStateListener { loadState ->
+                with(binding){
+                    rvSearch.isVisible = loadState.source.refresh is LoadState.NotLoading
+                    pbSearchLoading.isVisible = loadState.source.refresh is LoadState.Loading
+                    ivSearchRetry.isVisible = loadState.source.refresh is LoadState.Error
+                }
+                val errorState = loadState.source.append as? LoadState.Error
+                    ?: loadState.source.prepend as? LoadState.Error
+                    ?: loadState.append as? LoadState.Error
+                    ?: loadState.prepend as? LoadState.Error
+                errorState?.let {
+                    Toast.makeText(
+                        requireActivity(),
+                        "\uD83D\uDE28 ${it.error}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
         viewModel.bookList.observe(viewLifecycleOwner,
             Observer { pagingData ->
                 hideKeyboard(requireActivity())
@@ -80,6 +102,7 @@ class SearchBookFragment : Fragment(), SelectCallBack {
                 .filter { it.refresh is LoadState.NotLoading }
                 .collect { binding.rvSearch.scrollToPosition(0) }
         }
+        binding.ivSearchRetry.setOnClickListener { adapterBook.retry() }
     }
 
     private fun initSpinner() {

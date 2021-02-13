@@ -1,5 +1,6 @@
 package m.woong.kakaobookapp.data.remote
 
+import android.util.Log
 import m.woong.kakaobookapp.data.network.KakaoSearchApi
 import m.woong.kakaobookapp.data.remote.enums.KakaoSearchBookTargetType
 import m.woong.kakaobookapp.data.remote.model.KakaoBookResponse

@@ -11,7 +11,7 @@ interface KakaoSearchApi {
 
     @GET(SUB_PATH_BOOK)
     suspend fun searchBook(
-        @Header("Authorization") restApiKey: String = "KakaoAK $REST_API_KEY",
+        @Header("Authorization") restApiKey: String = REST_API_KEY,
         @Query("query") query: String,
         @Query("sort") sort: KakaoSearchSortType = KakaoSearchSortType.ACCURACY,
         @Query("page") page: Int = BOOK_STARTING_PAGE_INDEX,
@@ -20,7 +20,7 @@ interface KakaoSearchApi {
     ): KakaoBookResponse
 
     companion object {
-        const val REST_API_KEY = "5f5adf3b28b25871cc11ba3dcf7375fe"
+        const val REST_API_KEY = "KakaoAK 5f5adf3b28b25871cc11ba3dcf7375fe"
         const val SUB_PATH_BOOK = "v3/search/book"
         const val BOOK_STARTING_PAGE_INDEX = 1
         const val BOOK_PAGING_SIZE = 50
