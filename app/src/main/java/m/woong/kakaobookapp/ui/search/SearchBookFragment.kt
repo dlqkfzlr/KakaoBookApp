@@ -1,6 +1,5 @@
 package m.woong.kakaobookapp.ui.search
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
@@ -19,8 +18,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
-import androidx.paging.PagingData
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import m.woong.kakaobookapp.R
 import m.woong.kakaobookapp.databinding.SearchBookFragmentBinding
@@ -47,7 +47,7 @@ class SearchBookFragment : Fragment(), SelectCallBack {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setSpinner()
-        setEditTextIMEListener()
+        setEditTextListener()
         setPagingAdapter()
     }
 
@@ -63,17 +63,18 @@ class SearchBookFragment : Fragment(), SelectCallBack {
         adapterBook = SearchBookPagingAdapter(this)
         binding.rvSearch.adapter = adapterBook
         viewModel.bookList.observe(viewLifecycleOwner,
-            Observer {
+            Observer { pagingData ->
+                hideKeyboard(requireActivity())
                 viewLifecycleOwner.lifecycleScope.launch {
-                    hideKeyboard(requireActivity())
-                    adapterBook.submitData(PagingData.from(it))
+                    adapterBook.submitData(pagingData)
                 }
             })
     }
 
     private fun setSpinner() {
         val item = resources.getStringArray(R.array.search_book_target_type)
-        val arrAdapter = ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, item)
+        val arrAdapter =
+            ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_dropdown_item, item)
         with(binding.searchSpinner) {
             adapter = arrAdapter
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -94,11 +95,12 @@ class SearchBookFragment : Fragment(), SelectCallBack {
         }
     }
 
-    private fun setEditTextIMEListener() {
+    private fun setEditTextListener() {
         binding.etSearch.setOnEditorActionListener { _, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH    // soft keyboard
-                || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)){    // hard keyboard
-                viewModel.searchBooks()
+                || (event.keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_DOWN)    // hard keyboard
+            ) {
+                search()
                 true
             } else {
                 false
@@ -107,15 +109,19 @@ class SearchBookFragment : Fragment(), SelectCallBack {
 
     }
 
+    fun search() {
+        viewModel.searchBooks()
+    }
+
     private fun hideKeyboard(activity: Activity) {
         if (activity.currentFocus != null) {
-            val inputMethodManager = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputMethodManager =
+                activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(activity.currentFocus!!.windowToken, 0)
         }
     }
 
     companion object {
-        fun newInstance() = SearchBookFragment()
         val TAG = SearchBookFragment::class.java.simpleName
     }
 }
