@@ -11,19 +11,19 @@ import m.woong.kakaobookapp.ui.model.Book
 
 class SearchBookPagingAdapter(
     private val mCallback: SelectCallBack
-): PagingDataAdapter<Book, SearchBookViewholder>(DIFF_UTIL) {
+): PagingDataAdapter<Book, SearchBookViewHolder>(DIFF_UTIL) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchBookViewholder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchBookViewHolder {
         val binding = DataBindingUtil.inflate<BookViewItemBinding>(
             LayoutInflater.from(parent.context),
             R.layout.book_view_item,
             parent,
             false
         )
-        return SearchBookViewholder(binding, mCallback)
+        return SearchBookViewHolder(binding, mCallback)
     }
 
-    override fun onBindViewHolder(holder: SearchBookViewholder, position: Int) {
+    override fun onBindViewHolder(holder: SearchBookViewHolder, position: Int) {
         getItem(position)?.let { holder.onBind(it) }
     }
 

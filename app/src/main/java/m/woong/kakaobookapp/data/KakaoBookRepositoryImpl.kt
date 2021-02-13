@@ -1,16 +1,18 @@
-package m.woong
+package m.woong.kakaobookapp.data
 
 import androidx.paging.*
-import m.woong.local.LocalDataSource
-import m.woong.local.entity.Book
-import m.woong.local.entity.RemoteKey
-import m.woong.remote.RemoteDataSource
-import m.woong.remote.base.BaseRepository
-import m.woong.remote.enums.KakaoSearchBookTargetType
+import m.woong.kakaobookapp.data.local.LocalDataSource
+import m.woong.kakaobookapp.data.local.entity.Book
+import m.woong.kakaobookapp.data.local.entity.RemoteKey
+import m.woong.kakaobookapp.data.remote.RemoteDataSource
+import m.woong.kakaobookapp.data.remote.base.BaseRepository
+import m.woong.kakaobookapp.data.remote.enums.KakaoSearchBookTargetType
 import kotlinx.coroutines.flow.Flow
-import m.woong.network.KakaoSearchApi.Companion.BOOK_PAGING_SIZE
+import m.woong.kakaobookapp.paging.BookSearchRemoteMediator
+import m.woong.kakaobookapp.data.network.KakaoSearchApi.Companion.BOOK_PAGING_SIZE
 import javax.inject.Inject
 
+@OptIn(ExperimentalPagingApi::class)
 class KakaoBookRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource,
     private val remoteDataSource: RemoteDataSource
@@ -22,6 +24,18 @@ class KakaoBookRepositoryImpl @Inject constructor(
         target: KakaoSearchBookTargetType?
     ) = safeApiCall {
         remoteDataSource.searchBook(query, page, target)
+    }
+
+    override fun searchBookStream(
+        query: String,
+        target: KakaoSearchBookTargetType?
+    ): Flow<PagingData<Book>> {
+        val pagingSourceFactory = { localDataSource.getPagedBooks() }
+        return Pager(
+            config = PagingConfig(pageSize = BOOK_PAGING_SIZE, enablePlaceholders = false),
+            remoteMediator = BookSearchRemoteMediator(query, target, remoteDataSource, localDataSource),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
     }
 
     override suspend fun saveBooks(books: List<Book>) {
