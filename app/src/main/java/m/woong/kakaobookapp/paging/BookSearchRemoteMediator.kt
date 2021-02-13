@@ -1,16 +1,19 @@
 package m.woong.kakaobookapp.paging
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.bumptech.glide.load.HttpException
-import m.woong.kakaobookapp.data.local.entity.Book
+import kotlinx.coroutines.runBlocking
 import m.woong.kakaobookapp.data.local.LocalDataSource
+import m.woong.kakaobookapp.data.local.entity.Book
 import m.woong.kakaobookapp.data.local.entity.RemoteKey
 import m.woong.kakaobookapp.data.network.KakaoSearchApi.Companion.BOOK_STARTING_PAGE_INDEX
 import m.woong.kakaobookapp.data.remote.RemoteDataSource
 import m.woong.kakaobookapp.data.remote.enums.KakaoSearchBookTargetType
+import m.woong.kakaobookapp.data.remote.model.KakaoBookResponse
 import java.io.IOException
 import java.io.InvalidObjectException
 
@@ -23,39 +26,54 @@ class BookSearchRemoteMediator(
 ) : RemoteMediator<Int, Book>() {
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Book>): MediatorResult {
-        val page = when(loadType) {
+        Log.d("LOAD", "load호출1 loadType:$loadType state:$state")
+        val page = when (loadType) {
             LoadType.REFRESH -> {
                 val remoteKey = getRemoteKeyClosestToCurrentPosition(state)
                 remoteKey?.nextKey?.minus(1) ?: BOOK_STARTING_PAGE_INDEX
             }
-            LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
+            LoadType.PREPEND -> {
+                val remoteKey = getRemoteKeyForFirstItem(state)
+                    ?: throw InvalidObjectException("Remote key and the prevKey should not be null")
+                Log.d("LOAD", "PREPEND remoteKey:$remoteKey")
+
+                remoteKey.prevKey ?: return MediatorResult.Success(endOfPaginationReached = true)
+//                return MediatorResult.Success(endOfPaginationReached = true)
+            }
             LoadType.APPEND -> {
                 val remoteKey = getRemoteKeyForLastItem(state)
-                remoteKey?.nextKey ?: throw InvalidObjectException("Remote key should not be null for $loadType")
+                Log.d("LOAD", "APPEND remoteKey:$remoteKey")
+                remoteKey?.nextKey
+                    ?: throw InvalidObjectException("Remote key should not be null for $loadType")
             }
         }
 
         try {
             val response = remoteDataSource.searchBook(query, page = page, target = target)
-            val books = response.documents.map { it ->
-                Book(it.isbn, it.contents, it.datetime, it.price, it.publisher, it.thumbnail, it.title)
-            }
-            val endOfPaginationReached = books.isEmpty()
-            if (loadType == LoadType.REFRESH){
+            val books = response.documents.map { document -> documentToBook(document) }
+            val endOfPaginationReached = books.count() < state.config.pageSize
+            runBlocking {
+                if (loadType == LoadType.REFRESH) {
+                    with(localDataSource) {
+                        clearRemoteKeys()
+                        clearBooks()
+                    }
+                }
+                val prevKey = if (page == BOOK_STARTING_PAGE_INDEX) null else page - 1
+                val nextKey = if (endOfPaginationReached) null else page + 1
+                val remoteKeys = books.map { it ->
+                    RemoteKey(it.isbn, prevKey, nextKey)
+                }
+                Log.d(
+                    "LOAD",
+                    "load호출2 endOfPaginationReached:$endOfPaginationReached, remoteKeys:$remoteKeys, \n page:$page"
+                )
                 with(localDataSource) {
-                    clearRemoteKeys()
-                    clearBooks()
+                    saveRemoteKeys(remoteKeys = remoteKeys)
+                    saveBooks(books = books)
                 }
             }
-            val prevKey = if (page == BOOK_STARTING_PAGE_INDEX) null else page - 1
-            val nextKey = if (endOfPaginationReached) null else page + 1
-            val remoteKeys = books.map { it ->
-                RemoteKey(it.isbn, prevKey, nextKey)
-            }
-            with(localDataSource) {
-                saveBooks(books = books)
-                saveRemoteKeys(remoteKeys = remoteKeys)
-            }
+
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {
             return MediatorResult.Error(exception)
@@ -75,13 +93,35 @@ class BookSearchRemoteMediator(
         }
     }
 
-    // LoadType.APPEND
-    private suspend fun getRemoteKeyForLastItem(
+    // LoadType.PREPEND
+    private suspend fun getRemoteKeyForFirstItem(
         state: PagingState<Int, Book>
     ): RemoteKey? {
-        return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
+        return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { book ->
                 localDataSource.getRemoteKeyWithIsbn(book.isbn)
             }
     }
+
+    // LoadType.APPEND
+    private suspend fun getRemoteKeyForLastItem(
+        state: PagingState<Int, Book>
+    ): RemoteKey? {
+        return state.pages.lastOrNull() {
+            it.data.isNotEmpty()
+        }?.data?.lastOrNull()
+            ?.let { book ->
+                localDataSource.getRemoteKeyWithIsbn(book.isbn)
+            }
+    }
+
+    private fun documentToBook(document: KakaoBookResponse.Document): Book = Book(
+        document.isbn,
+        document.contents,
+        document.datetime,
+        document.price,
+        document.publisher,
+        document.thumbnail,
+        document.title
+    )
 }
