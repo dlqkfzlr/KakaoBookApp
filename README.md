@@ -1,18 +1,19 @@
 # KakaoBookApp
 Sample Android App using Kakao Book API for book searching
 
-## Architecture
+## Design Pattern
 
-- Clean Architecture
+- MVVM
 
 ## Async
 
-- Coroutine
+- Coroutine & Flow
 
 ## Library
 
-- DataBinding
+- DataBinding & ViewBinding
 - Glide
 - Hilt
+- LiveData
 - Paging 3
 - Room
