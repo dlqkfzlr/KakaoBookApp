@@ -8,6 +8,7 @@
     <string name="failure_books_list_unavailable">Books Unavailable.</string>
     <string name="failure_book_non_existent">Book Not Existent.</string>
     <string name="failure_db_update">좋아요 여부 반영안됨</string>
+    <string name="search_book_empty">해당 검색어의 책이 존재하지 않습니다.</string>
     <string name="search_book_query_hint">검색어를 입력해주세요</string>
     <string name="search_retry">재시도</string>
     <string name="book_is_favorite">이 책 좋아요!</string>

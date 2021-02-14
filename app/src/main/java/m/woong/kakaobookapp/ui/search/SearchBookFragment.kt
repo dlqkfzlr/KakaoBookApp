@@ -3,7 +3,6 @@ package m.woong.kakaobookapp.ui.search
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -29,7 +28,6 @@ import m.woong.kakaobookapp.R
 import m.woong.kakaobookapp.databinding.SearchBookFragmentBinding
 import m.woong.kakaobookapp.ui.MainViewModel
 import m.woong.kakaobookapp.ui.model.Book
-import m.woong.kakaobookapp.utils.showSnackbar
 
 @AndroidEntryPoint
 class SearchBookFragment : Fragment(), SelectCallBack {
@@ -71,19 +69,14 @@ class SearchBookFragment : Fragment(), SelectCallBack {
         adapterBook.addLoadStateListener { loadState ->
             with(binding) {
                 // refresh시 loadState
+                tvEmptyList.isVisible = loadState.refresh is LoadState.NotLoading
+                        && loadState.append.endOfPaginationReached
+                        && adapterBook.itemCount < 1
                 rvSearch.isVisible = loadState.refresh is LoadState.NotLoading
                 pbSearchLoading.isVisible = loadState.refresh is LoadState.Loading
                 tvNetworkFailure.isVisible = loadState.refresh is LoadState.Error
                 ivSearchRetry.isVisible = loadState.refresh is LoadState.Error
             }
-            /*val errorState = loadState.source.append as? LoadState.Error
-                ?: loadState.source.prepend as? LoadState.Error
-                ?: loadState.append as? LoadState.Error
-                ?: loadState.prepend as? LoadState.Error
-            errorState?.let {
-                // 추가 로딩시 errorState
-                binding.rootSearch.showSnackbar("${it.error}")
-            }*/
         }
 
         viewModel.bookList.observe(viewLifecycleOwner,
@@ -138,7 +131,6 @@ class SearchBookFragment : Fragment(), SelectCallBack {
                 false
             }
         }
-
     }
 
     fun search() {
@@ -154,6 +146,6 @@ class SearchBookFragment : Fragment(), SelectCallBack {
     }
 
     companion object {
-        val TAG = SearchBookFragment::class.java.simpleName
+        private val TAG = SearchBookFragment::class.java.simpleName
     }
 }

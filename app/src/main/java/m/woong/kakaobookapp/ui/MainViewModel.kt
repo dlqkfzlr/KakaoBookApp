@@ -32,7 +32,7 @@ class MainViewModel @Inject constructor(
     }
 
     private var _targetType = MutableLiveData<KakaoSearchBookTargetType>()
-    private val targetType: LiveData<KakaoSearchBookTargetType>
+    val targetType: LiveData<KakaoSearchBookTargetType>
         get() = _targetType
 
     private var _bookList = MutableLiveData<PagingData<Book>>()
@@ -126,7 +126,4 @@ class MainViewModel @Inject constructor(
         book.isFavorite
     )
 
-    companion object {
-        val PAGING_TAG = "PAGING_TAG"
-    }
 }
