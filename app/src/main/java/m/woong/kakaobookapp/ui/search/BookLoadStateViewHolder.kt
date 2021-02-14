@@ -1,5 +1,6 @@
 package m.woong.kakaobookapp.ui.search
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -20,8 +21,11 @@ class BookLoadStateViewHolder(
     }
 
     fun bind(loadState: LoadState) {
-        binding.pbSearchLoading.isVisible = loadState is LoadState.Loading
-        binding.ivSearchRetry.isVisible = loadState !is LoadState.Loading
+        with(binding){
+            pbSearchLoading.isVisible = loadState is LoadState.Loading
+            tvNetworkFailure.isVisible = loadState !is LoadState.Loading
+            ivSearchRetry.isVisible = loadState !is LoadState.Loading
+        }
     }
 
     companion object {

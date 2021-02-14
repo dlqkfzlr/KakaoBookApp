@@ -1,5 +1,6 @@
 package m.woong.kakaobookapp.ui
 
+import android.util.Log
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
@@ -16,6 +17,7 @@ import m.woong.kakaobookapp.data.KakaoBookRepository
 import m.woong.kakaobookapp.data.remote.enums.KakaoSearchBookTargetType
 import m.woong.kakaobookapp.data.remote.enums.KakaoSearchBookTargetType.*
 import m.woong.kakaobookapp.ui.model.Book
+import m.woong.kakaobookapp.utils.Event
 import javax.inject.Inject
 import m.woong.kakaobookapp.data.local.entity.Book as DbBook
 
@@ -41,6 +43,10 @@ class MainViewModel @Inject constructor(
     private var currentBookList: Flow<PagingData<Book>>? = null
 
     private var searchJob: Job? = null
+
+    private var _dbUpdateSuccess = MutableLiveData<Event<Boolean>>()
+    val dbUpdateSuccess: LiveData<Event<Boolean>>
+    get() = _dbUpdateSuccess
 
     override fun onCleared() {
         super.onCleared()
@@ -89,7 +95,8 @@ class MainViewModel @Inject constructor(
         book.isFavorite = !book.isFavorite
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                repository.updateBook(uiBookToDbBook(book))
+                val result = repository.updateBook(uiBookToDbBook(book))
+                _dbUpdateSuccess.postValue(Event(result == 1))
             }
         }
     }

@@ -3,6 +3,7 @@ package m.woong.kakaobookapp.ui.search
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,6 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -29,6 +29,7 @@ import m.woong.kakaobookapp.R
 import m.woong.kakaobookapp.databinding.SearchBookFragmentBinding
 import m.woong.kakaobookapp.ui.MainViewModel
 import m.woong.kakaobookapp.ui.model.Book
+import m.woong.kakaobookapp.utils.showSnackbar
 
 @AndroidEntryPoint
 class SearchBookFragment : Fragment(), SelectCallBack {
@@ -64,30 +65,27 @@ class SearchBookFragment : Fragment(), SelectCallBack {
 
     private fun initPagingAdapter() {
         adapterBook = SearchBookPagingAdapter(this)
-        binding.rvSearch.adapter = adapterBook.apply {
-            withLoadStateHeaderAndFooter(
-                header = BookLoadStateAdapter(adapterBook::retry),
-                footer = BookLoadStateAdapter(adapterBook::retry)
-            )
-            addLoadStateListener { loadState ->
-                with(binding){
-                    rvSearch.isVisible = loadState.source.refresh is LoadState.NotLoading
-                    pbSearchLoading.isVisible = loadState.source.refresh is LoadState.Loading
-                    ivSearchRetry.isVisible = loadState.source.refresh is LoadState.Error
-                }
-                val errorState = loadState.source.append as? LoadState.Error
-                    ?: loadState.source.prepend as? LoadState.Error
-                    ?: loadState.append as? LoadState.Error
-                    ?: loadState.prepend as? LoadState.Error
-                errorState?.let {
-                    Toast.makeText(
-                        requireActivity(),
-                        "\uD83D\uDE28 ${it.error}",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+        binding.rvSearch.adapter = adapterBook.withLoadStateFooter(
+            footer = BookLoadStateAdapter(adapterBook::retry)
+        )
+        adapterBook.addLoadStateListener { loadState ->
+            with(binding) {
+                // refresh시 loadState
+                rvSearch.isVisible = loadState.refresh is LoadState.NotLoading
+                pbSearchLoading.isVisible = loadState.refresh is LoadState.Loading
+                tvNetworkFailure.isVisible = loadState.refresh is LoadState.Error
+                ivSearchRetry.isVisible = loadState.refresh is LoadState.Error
             }
+            /*val errorState = loadState.source.append as? LoadState.Error
+                ?: loadState.source.prepend as? LoadState.Error
+                ?: loadState.append as? LoadState.Error
+                ?: loadState.prepend as? LoadState.Error
+            errorState?.let {
+                // 추가 로딩시 errorState
+                binding.rootSearch.showSnackbar("${it.error}")
+            }*/
         }
+
         viewModel.bookList.observe(viewLifecycleOwner,
             Observer { pagingData ->
                 hideKeyboard(requireActivity())

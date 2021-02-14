@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -15,10 +16,7 @@ import m.woong.kakaobookapp.R
 import m.woong.kakaobookapp.databinding.BookDetailsFragmentBinding
 import m.woong.kakaobookapp.ui.MainViewModel
 import m.woong.kakaobookapp.ui.model.Book
-import m.woong.kakaobookapp.utils.toKoreanWon
-import m.woong.kakaobookapp.utils.setParsedHtmlText
-import m.woong.kakaobookapp.utils.setUrl
-import m.woong.kakaobookapp.utils.toDate
+import m.woong.kakaobookapp.utils.*
 
 @AndroidEntryPoint
 class BookDetailsFragment: Fragment() {
@@ -44,6 +42,17 @@ class BookDetailsFragment: Fragment() {
             binding.book = book
             book?.let { setViewContent(it) }
         }
+        viewModel.dbUpdateSuccess.observe(viewLifecycleOwner,
+        Observer {
+            it.getContentIfNotHandled()?.let { isSuccess ->
+                val isFavorite = binding.tbBookFavorite.isChecked
+                val msg = resources.getString(
+                    if (isSuccess && isFavorite)R.string.book_is_favorite
+                    else if (isSuccess && !isFavorite) R.string.book_is_not_favorite
+                    else R.string.failure_db_update)
+                binding.rootDetail.showSnackbar(msg)
+            }
+        })
     }
 
     @SuppressLint("SetTextI18n")

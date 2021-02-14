@@ -2,14 +2,14 @@
     <string name="app_name">KakaoBookApp</string>
 
     <string name="action_refresh">Refresh</string>
-
-    <string name="failure_network_connection">No Network Connection.</string>
+    <string name="content_description_empty">No content description.</string>
+    <string name="failure_network_connection">네트워크 연결 실패</string>
     <string name="failure_server_error">Server Error</string>
     <string name="failure_books_list_unavailable">Books Unavailable.</string>
     <string name="failure_book_non_existent">Book Not Existent.</string>
-
-    <string name="content_description_empty">No content description.</string>
-
+    <string name="failure_db_update">좋아요 여부 반영안됨</string>
     <string name="search_book_query_hint">검색어를 입력해주세요</string>
     <string name="search_retry">재시도</string>
+    <string name="book_is_favorite">이 책 좋아요!</string>
+    <string name="book_is_not_favorite">좋아요 취소</string>
 </resources>

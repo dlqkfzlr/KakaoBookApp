@@ -2,11 +2,13 @@ package m.woong.kakaobookapp.utils
 
 import android.annotation.SuppressLint
 import android.text.Html
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import m.woong.kakaobookapp.R
 
 
@@ -18,7 +20,6 @@ fun ImageView.setUrl(url: String) {
         .error(R.drawable.ic_error_outline_24)
         .into(this)
 }
-
 
 /* TextView*/
 @BindingAdapter("htmlText")
@@ -44,4 +45,13 @@ fun TextView.setKoreanWon(price: String) {
 @BindingAdapter("favorite")
 fun ToggleButton.setFavorite(isFavorite: Boolean) {
     this.isChecked = isFavorite
+}
+
+/* Snackbar */
+fun View.showSnackbar(msg: String) {
+    Snackbar.make(this, msg, Snackbar.LENGTH_LONG).also { sb ->
+        sb.setAction("OK") {
+            sb.dismiss()
+        }
+    }.show()
 }

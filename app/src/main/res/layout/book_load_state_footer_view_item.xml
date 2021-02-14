@@ -3,20 +3,26 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:gravity="center"
     android:padding="8dp">
 
     <ProgressBar
         android:id="@+id/pbSearchLoading"
         style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvNetworkFailure"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:textColor="@color/black"
+        android:text="@string/failure_network_connection"/>
 
     <Button
         android:id="@+id/ivSearchRetry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:text="@string/search_retry"
         android:textColor="@color/black" />
 </LinearLayout>
