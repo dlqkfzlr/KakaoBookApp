@@ -41,5 +41,6 @@ ext {
     paging_version = '3.0.0-alpha11'
     recycler_version = '1.1.0'
     retrofit_version = '2.9.0'
+    okhttp_log_version = '4.9.0'
     room_version = '2.3.0-beta01'
 }

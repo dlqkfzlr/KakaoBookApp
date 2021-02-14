@@ -16,7 +16,7 @@ interface KakaoSearchApi {
         @Query("sort") sort: KakaoSearchSortType = KakaoSearchSortType.ACCURACY,
         @Query("page") page: Int = BOOK_STARTING_PAGE_INDEX,
         @Query("size") size: Int = BOOK_PAGING_SIZE,
-        @Query("target") target: KakaoSearchBookTargetType? = null,
+        @Query("target") target: KakaoSearchBookTargetType?,
     ): KakaoBookResponse
 
     companion object {
