@@ -1,7 +1,7 @@
 # KakaoBookApp
 Sample Android App using Kakao Book API for book searching
 
-## Design Pattern
+## Architecture
 
 - MVVM
 
