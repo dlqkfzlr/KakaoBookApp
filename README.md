@@ -11,7 +11,8 @@ Sample Android App using Kakao Book API for book searching
 
 ## Library
 
-- DataBinding & ViewBinding
+- DataBinding 
+- ViewBinding
 - Glide
 - Hilt
 - LiveData
