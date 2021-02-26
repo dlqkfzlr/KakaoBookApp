@@ -18,4 +18,5 @@ Sample Android App using Kakao Book API for book searching
 - LiveData
 - Navigation
 - Paging 3
+- Retrofit 2
 - Room
